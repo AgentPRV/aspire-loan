@@ -11,8 +11,8 @@ class LoanController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric',
-            'term_duration' => 'required|integer'
+            'amount' => 'required|numeric|min:1',
+            'term_duration' => 'required|integer|min:1'
         ]);
 
         $data = [

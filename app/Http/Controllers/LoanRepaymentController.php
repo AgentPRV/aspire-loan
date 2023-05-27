@@ -20,8 +20,8 @@ class LoanRepaymentController extends Controller
             'user_id' => $request->user()->id
         ])->first();
 
-        if(!$loan){
-            return response(["message"=> "Invalid loan ID"], 412);
+        if(!$loan || $loan->status_id!=LoanStatuses::APPROVED){
+            return response(["message"=> "Invalid loan ID/Status"], 412);
         }
 
         $deposits = $this->getRequiredDeposits($loan);

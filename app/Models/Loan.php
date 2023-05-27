@@ -22,7 +22,7 @@ class Loan extends Model
 
     public function status()
     {
-        return $this->belongsTo(LoanStatus::class);
+        return $this->belongsTo(LoanStatuses::class);
     }
 
     public function repayments(){

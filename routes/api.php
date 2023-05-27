@@ -27,7 +27,6 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::post('/loan/{loanId}/repayment', [LoanRepaymentController::class, 'create']);
-    Route::get('/loan/{loanId}/repayments', [LoanRepaymentController::class, 'getAll']);
 });
 
 Route::post('/register', [UserController::class, 'register']);
