@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Loan;
-use App\Models\LoanStatuses;
+use App\Services\LoanService;
 use Illuminate\Http\Request;
 
 class LoanController extends Controller
 {
+    private $loanService;
+
+    public function __construct(LoanService $loanService)
+    {
+        $this->loanService = $loanService;
+    }
+
     public function create(Request $request)
     {
         $request->validate([
@@ -15,53 +21,42 @@ class LoanController extends Controller
             'term_duration' => 'required|integer|min:1'
         ]);
 
-        $data = [
-            'user_id' => $request->user()->id,
-            'amount' => $request->amount,
-            'term_duration' => $request->term_duration,
-            'status_id' => LoanStatuses::PENDING
-        ];
+        $userId = $request->user()->id;
+        $amount = $request->amount;
+        $termDuration = $request->term_duration;
 
-        $loan = Loan::create($data);
+        $loan = $this->loanService->createLoan($userId, $amount, $termDuration);
 
         return response()->json($loan, 201);
     }
 
     public function getAllForUser(Request $request)
-    {   
-        $loans = Loan::where('user_id', $request->user()->id)->get();
+    {
+        $userId = $request->user()->id;
+        $loans = $this->loanService->getLoansForUser($userId);
 
         return response()->json($loans);
     }
 
     public function getById(Request $request, $id)
     {
-        $loan = Loan::with('repayments')->where([
-            'id' => $id,
-            'user_id' => $request->user()->id
-        ])->first();
+        $userId = $request->user()->id;
+        $loan = $this->loanService->getLoanById($id, $userId);
 
         return response()->json($loan);
     }
 
     public function approve(Request $request, $loanId)
     {
-        $loan = Loan::findOrFail($loanId);
-        if($loan->status_id != LoanStatuses::PENDING){
-            return response(["message"=> "Invalid loan status"], 422);
-        }
-        $loan->status_id = LoanStatuses::APPROVED;
-        $loan->save();
+        $loan = $this->loanService->approveLoan($loanId);
 
         return response()->json($loan);
     }
 
     public function getAll(Request $request)
-    {   
-        $loans = Loan::all();
+    {
+        $loans = $this->loanService->getAllLoans();
 
         return response()->json($loans);
     }
-
-    
 }

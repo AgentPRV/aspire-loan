@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Loan;
-use App\Models\LoanRepayment;
 use App\Models\LoanStatuses;
+use App\Services\LoanRepaymentService;
 use Illuminate\Http\Request;
 
 class LoanRepaymentController extends Controller
 {
+    private $loanRepaymentService;
+
+    public function __construct(LoanRepaymentService $loanRepaymentService)
+    {
+        $this->loanRepaymentService = $loanRepaymentService;
+    }
+
     public function create(Request $request, $loanId)
     {
         $request->validate([
@@ -20,37 +27,16 @@ class LoanRepaymentController extends Controller
             'user_id' => $request->user()->id
         ])->first();
 
-        if(!$loan || $loan->status_id!=LoanStatuses::APPROVED){
-            return response(["message"=> "Invalid loan ID/Status"], 412);
+        if (!$loan || $loan->status_id != LoanStatuses::APPROVED) {
+            return response(["message"=> "Invalid loan ID/Status"], 422);
         }
 
-        $deposits = $this->getRequiredDeposits($loan);
-        
-        if($request->input('amount') < $deposits['min'] || $request->input('amount') > $deposits['max']){
-            return response(["message"=> "Amount is invalid"], 422);
-        }
-
-        $repayment = new LoanRepayment([
-            'amount' => $request->input('amount'),
-            'loan_id' => $loan->id,
-        ]);
-
-        $repayment->save();
-
-        // check if we can mark the loan as PAID
-        if($request->input('amount') == $deposits['max']){
-            $loan->status_id = LoanStatuses::PAID;
-            $loan->save();
+        try {
+            $repayment = $this->loanRepaymentService->createRepayment($loan, $request->input('amount'));
+        } catch (\InvalidArgumentException $e) {
+            return response(["message" => $e->getMessage()], 422);
         }
 
         return response()->json($repayment, 201);
-    }
-
-    private function getRequiredDeposits($loan){
-        $totalAmount = $loan->amount;
-        $repayments = $loan->repayments;
-        $max = $totalAmount - $repayments->sum('amount');
-        $min = ($max) / ($loan->term_duration - $repayments->count());
-        return ["max" => $max, "min" => $min];
     }
 }
