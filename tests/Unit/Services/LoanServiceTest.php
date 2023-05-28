@@ -31,7 +31,7 @@ class LoanServiceTest extends TestCase
         $user = User::factory()->create();
         $amount = 1000;
         $termDuration = 30;
-        $loanStatus = LoanStatuses::factory()->create();
+        $loanStatus = LoanStatuses::factory()->create(["id" => LoanStatuses::PENDING]);
         // Call the createLoan method of the LoanService
         $loan = $this->loanService->createLoan($user->id, $amount, $termDuration);
 
@@ -99,7 +99,8 @@ class LoanServiceTest extends TestCase
     public function testApproveLoanWithValidLoan()
     {
         // Create a test loan with pending status
-        $loanStatus = LoanStatuses::factory()->create();
+        LoanStatuses::factory()->create();
+        LoanStatuses::factory()->create(["id" => LoanStatuses::APPROVED]);
 
         $loan = Loan::factory()->create([
             'status_id' => LoanStatuses::PENDING,

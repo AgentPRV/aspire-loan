@@ -30,7 +30,7 @@ class LoanRepaymentServiceTest extends TestCase
         $amount = 2000;
         $user = User::factory()->create();
 
-
+        $loanStatus = LoanStatuses::factory()->create(["id" => LoanStatuses::APPROVED]);
         // Create a loan
         $loan = Loan::factory()->create([
             'id' => $loanId,

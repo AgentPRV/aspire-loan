@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Controllers;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Http\Controllers\LoanRepaymentController;
 use App\Models\User;
@@ -14,6 +15,8 @@ use Mockery;
 
 class LoanRepaymentControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected $loanRepaymentService;
 
     public function setUp(): void
@@ -74,7 +77,7 @@ class LoanRepaymentControllerTest extends TestCase
     public function testCreateRepaymentWithInvalidAmount()
     {
         $user = User::factory()->create();
-        // $loanStatus = LoanStatuses::factory()->create(['id' => LoanStatuses::APPROVED]);
+        $loanStatus = LoanStatuses::factory()->create(['id' => LoanStatuses::APPROVED]);
         $loan = Loan::factory()->create([
             'user_id' => $user->id,
             'status_id' => LoanStatuses::APPROVED
