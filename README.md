@@ -61,10 +61,17 @@ php artisan test
 ## API Documentation (Postman)
 API Documentation is published on the postman cloud, click [here](https://documenter.getpostman.com/view/2470580/2s93m8xKRu) to open the same.
 
-Collection can be exported from this [link](https://api.postman.com/collections/2470580-b80013ad-d635-4a8c-abb0-87356632c1b9?access_key=PMAT-01H1HN84KZPN392XXRCCY82K0B)
+Collection can be exported from above link or from this [link](https://api.postman.com/collections/2470580-b80013ad-d635-4a8c-abb0-87356632c1b9?access_key=PMAT-01H1HN84KZPN392XXRCCY82K0B)
 
 
 Note - Please add one environment and a key `token` in your postman because one script is there in Login API which will set the environment variable automatically.
+
+## Admin Credentials
+Below are the admin credentials which can be found in database seeder as well - 
+
+Email - `aspireadmin@gmail.com`
+
+Password - `AspireAdmin@2023`
 
 ## Project Overview and Decisions
 
