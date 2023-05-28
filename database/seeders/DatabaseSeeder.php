@@ -4,6 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Role;
+use App\Models\User;
+use App\Models\LoanStatuses;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +16,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        // seed roles
+        $adminRole = Role::create(['name' => 'admin']);
+        $userRole = Role::create(['name' => 'user']);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // seed admin user
+        $adminUser = User::create([
+            "name" => "Prakalp",
+            "email" => "aspireadmin@gmail.com",
+            "password" => Hash::make("AspireAdmin@2023"),
+            "role_id" => $adminRole->id
+        ]);
+
+        // seed statuses
+        LoanStatuses::create(['name' => "pending"]);
+        LoanStatuses::create(['name' => "approved"]);
+        LoanStatuses::create(['name' => "paid"]);
     }
 }

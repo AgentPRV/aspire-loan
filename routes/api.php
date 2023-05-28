@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\LoanController;
+use App\Http\Controllers\LoanRepaymentController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/loan', [LoanController::class, 'create']);
+    Route::get('/loan/{id}', [LoanController::class, 'getById']);
+    Route::get('/loans', [LoanController::class, 'getAllForUser']);
+
+    Route::middleware('admin')->group(function () {
+        Route::post('/loan/approve/{loanId}', [LoanController::class, 'approve']);
+        Route::get('/loans/all', [LoanController::class, 'getAll']);
+    });
+
+    Route::post('/loan/{loanId}/repayment', [LoanRepaymentController::class, 'create']);
 });
+
+Route::post('/register', [UserController::class, 'register']);
+Route::post('/login', [UserController::class, 'login']);
