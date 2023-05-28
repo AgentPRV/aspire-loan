@@ -22,6 +22,11 @@ Follow the below steps one by one in order to setup your application.
 git clone https://github.com/AgentPRV/aspire-loan.git
 ````
 
+### Composer Update
+If composer is not installed in your system then install it from [here](https://getcomposer.org/download/)
+````
+composer Update
+````
 ### Database Config Setup
 Create & Set Database ENV keys using any MySQL GUI
 
@@ -46,3 +51,11 @@ Aspire App contains Feature and Unit test cases both, please run the below comma
 ````
 php artisan test
 ````
+
+## API Documentation (Postman)
+API Documentation is published on the postman cloud, click [here](https://documenter.getpostman.com/view/2470580/2s93m8xKRu) to open the same.
+
+Collection can be exported from this [link](https://api.postman.com/collections/2470580-b80013ad-d635-4a8c-abb0-87356632c1b9?access_key=PMAT-01H1HN84KZPN392XXRCCY82K0B)
+
+
+Note - Please add one environment and a key `token` in your postman because one script is there in Login API which will set the environment variable automatically.
