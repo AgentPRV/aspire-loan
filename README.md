@@ -25,10 +25,16 @@ git clone https://github.com/AgentPRV/aspire-loan.git
 ### Composer Update
 If composer is not installed in your system then install it from [here](https://getcomposer.org/download/)
 ````
-composer Update
+composer update
+````
+
+If you are getting version conflict error that "Your requirements could not be resolved to an installable set of packages" which is due to different PHP versions then it can be resolved by below command, moreover we can use Docker to solve this issue.
+
+````
+composer install --ignore-platform-reqs
 ````
 ### Database Config Setup
-Create & Set Database ENV keys using any MySQL GUI
+Create a Database using any MySQL GUI and add database configuration (Host, Name and Password) in either .env file (need to create from .env.example file) or in config/database.php
 
 ### Run Migrations
 ````
@@ -59,3 +65,31 @@ Collection can be exported from this [link](https://api.postman.com/collections/
 
 
 Note - Please add one environment and a key `token` in your postman because one script is there in Login API which will set the environment variable automatically.
+
+## Project Overview and Decisions
+
+### Authorization & Authentication - 
+For Auth mechanism, we have used [Laravel Sanctum](https://laravel.com/docs/10.x/sanctum) which is a light weight library to create API tokens and SPA Authentication as well.
+
+#### Alternative - 
+[Laravel Passport](https://laravel.com/docs/10.x/passport) was one of the closest alternative for Sanctum but here we didn't required end-to-end oAuth Support, you can read more about this here in official [documentation](https://laravel.com/docs/10.x/passport#passport-or-sanctum) that when to use which one.
+
+## Folder Structure - 
+
+Apart from base Laravel structure below are the main folders in which we have our logic implementations - 
+
+* app/Http/Controllers - This folder contains all the controllers which validate the API body if required and call their respective service layer.
+
+* app/Models - This folder contains all the models having their schema relations.
+
+* app/Services - This folder have all the services containing all business logic.
+
+* database/factories - Contain all factories which majorly used in Testing.
+
+* database/migrations - Contain all basic migrations that are required for application.
+
+* database/seeders - Contain DB seeders.
+
+* routes - Contain all routes for the application, in our use case we are using api.php file.
+
+* tests - This folder contains all the test cases (Feature and Unit test case both)
