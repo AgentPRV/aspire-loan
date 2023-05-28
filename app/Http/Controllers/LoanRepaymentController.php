@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Loan;
-use App\Models\LoanStatuses;
 use App\Services\LoanRepaymentService;
 use Illuminate\Http\Request;
 
@@ -21,18 +19,9 @@ class LoanRepaymentController extends Controller
         $request->validate([
             'amount' => 'required|numeric',
         ]);
-
-        $loan = Loan::with('repayments')->where([
-            'id' => $loanId,
-            'user_id' => $request->user()->id
-        ])->first();
-
-        if (!$loan || $loan->status_id != LoanStatuses::APPROVED) {
-            return response(["message"=> "Invalid loan ID/Status"], 422);
-        }
-
+        $userId = $request->user()->id;
         try {
-            $repayment = $this->loanRepaymentService->createRepayment($loan, $request->input('amount'));
+            $repayment = $this->loanRepaymentService->createRepayment($loanId, $request->input('amount'), $userId);
         } catch (\InvalidArgumentException $e) {
             return response(["message" => $e->getMessage()], 422);
         }

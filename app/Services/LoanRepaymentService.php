@@ -2,14 +2,23 @@
 
 namespace App\Services;
 
-use App\Models\Loan;
 use App\Models\LoanRepayment;
+use App\Models\Loan;
 use App\Models\LoanStatuses;
 
 class LoanRepaymentService
 {
-    public function createRepayment(Loan $loan, float $amount): LoanRepayment
+    public function createRepayment($loanId, $amount, $userId)
     {
+        $loan = Loan::with('repayments')->where([
+            'id' => $loanId,
+            'user_id' => $userId
+        ])->first();
+
+        if (!$loan || $loan->status_id != LoanStatuses::APPROVED) {
+            throw new \InvalidArgumentException('Invalid loan ID/Status');
+        }
+
         $deposits = $this->getRequiredDeposits($loan);
 
         if ($amount < $deposits['min'] || $amount > $deposits['max']) {
