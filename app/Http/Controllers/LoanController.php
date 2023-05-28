@@ -48,7 +48,7 @@ class LoanController extends Controller
     {
         $loan = Loan::findOrFail($loanId);
         if($loan->status_id != LoanStatuses::PENDING){
-            return response(["message"=> "Invalid loan status"], 412);
+            return response(["message"=> "Invalid loan status"], 422);
         }
         $loan->status_id = LoanStatuses::APPROVED;
         $loan->save();

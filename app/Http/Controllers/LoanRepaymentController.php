@@ -27,7 +27,7 @@ class LoanRepaymentController extends Controller
         $deposits = $this->getRequiredDeposits($loan);
         
         if($request->input('amount') < $deposits['min'] || $request->input('amount') > $deposits['max']){
-            return response(["message"=> "Amount is invalid"], 412);
+            return response(["message"=> "Amount is invalid"], 422);
         }
 
         $repayment = new LoanRepayment([
