@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Controllers;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use App\Services\UserService;
@@ -13,6 +14,8 @@ use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     private $userService;
     private $userController;
 
