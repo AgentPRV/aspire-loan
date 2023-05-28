@@ -27,8 +27,14 @@ If composer is not installed in your system then install it from [here](https://
 ````
 composer update
 ````
+
+If you are getting version conflict error that "Your requirements could not be resolved to an installable set of packages" which is due to different PHP versions then it can be resolved by below command, moreover we can use Docker to solve this issue.
+
+````
+composer install --ignore-platform-reqs
+````
 ### Database Config Setup
-Create & Set Database ENV keys using any MySQL GUI
+Create a Database using any MySQL GUI and add database configuration (Host, Name and Password) in either .env file (need to create from .env.example file) or in config/database.php
 
 ### Run Migrations
 ````
